@@ -32,7 +32,6 @@ public class AuditPizzaListener {
 
 
     @PreRemove
-    @PreL
     public void onPreDelete(PizzaEntity entity)
     {
         System.out.println("POST PERSIST OR UPDATE");
