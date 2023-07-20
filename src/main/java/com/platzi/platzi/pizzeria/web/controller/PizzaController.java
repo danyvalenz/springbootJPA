@@ -1,6 +1,7 @@
 package com.platzi.platzi.pizzeria.web.controller;
 
 
+import com.platzi.platzi.pizzeria.persistence.entity.Dto.UpdatePizzaPriceDTO;
 import com.platzi.platzi.pizzeria.persistence.entity.PizzaEntity;
 import com.platzi.platzi.pizzeria.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,5 +77,12 @@ public class PizzaController {
     public ResponseEntity<Page<PizzaEntity>> paginandsortingOrderBy(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "5") Integer elements)
     {
         return ResponseEntity.ok(this.pizzaService.pageAndSorting(page,elements));
+    }
+
+    @PutMapping("/price")
+    public ResponseEntity updatePricePizza(@RequestBody UpdatePizzaPriceDTO dto)
+    {
+        this.pizzaService.updatePricePizza(dto);
+        return ResponseEntity.ok().build();
     }
 }

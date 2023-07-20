@@ -1,6 +1,7 @@
 package com.platzi.platzi.pizzeria.service;
 
 import com.platzi.platzi.pizzeria.persistence.entity.OrderEntity;
+import com.platzi.platzi.pizzeria.persistence.projection.OrderSummary;
 import com.platzi.platzi.pizzeria.persistence.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,10 @@ public class OrderService {
     public List<OrderEntity> findByMethod(List<String> methods)
     {
         return this.orderRepository.findAllByMethodIn(methods);
+    }
+
+    public OrderSummary findSummary(Integer idOrder)
+    {
+        return this.orderRepository.findSummary(idOrder);
     }
 }

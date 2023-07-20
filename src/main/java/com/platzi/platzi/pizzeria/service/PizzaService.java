@@ -1,8 +1,10 @@
 package com.platzi.platzi.pizzeria.service;
 
+import com.platzi.platzi.pizzeria.persistence.entity.Dto.UpdatePizzaPriceDTO;
 import com.platzi.platzi.pizzeria.persistence.entity.PizzaEntity;
 import com.platzi.platzi.pizzeria.persistence.repository.PizzaPaginSortingRepository;
 import com.platzi.platzi.pizzeria.persistence.repository.PizzaRepository;
+import com.platzi.platzi.pizzeria.service.exception.EmailApiException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,6 +61,7 @@ public class PizzaService {
         }
     }
 
+
     public List<PizzaEntity> availablePizza(){
         return this.pizzaRepository.findAllByAvailableTrueOrderByPriceDesc();
     }
@@ -78,5 +82,21 @@ public class PizzaService {
     {
         Pageable pageableRequest = PageRequest.of(page,elements);
         return this.pizzaPaginSortingRepository.findAllByOrderByIdPizzaDesc(pageableRequest);
+    }
+
+
+    @Transactional(noRollbackFor = EmailApiException.class)
+    public void updatePricePizza(UpdatePizzaPriceDTO dto)
+    {
+        if(existePizza(dto.getPizzaId()))
+        {
+            this.pizzaRepository.updatePrice(dto);
+            this.enviarEmail();
+        }
+    }
+
+    public Void enviarEmail()
+    {
+        throw new EmailApiException();
     }
 }
